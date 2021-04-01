@@ -45,7 +45,8 @@ private:
     OscComponent osc2;
     AdsrComponent adsr;
     
-    juce::Slider gainSlider1;
+   
+
     juce::Slider unisonSlider1;
     juce::Slider spreadSlider1;
     juce::Slider tuneSlider1;
@@ -55,5 +56,5 @@ private:
     juce::Slider spreadSlider2;
     juce::Slider tuneSlider2;
     
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SupersawDesignerPrototypeAudioProcessorEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SupersawDesignerPrototypeAudioProcessorEditor);
 };

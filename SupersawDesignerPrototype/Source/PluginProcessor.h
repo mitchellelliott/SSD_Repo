@@ -57,10 +57,10 @@ public:
     
     juce::AudioProcessorValueTreeState apvts;
     
-    float osc1Gain = 1.f;
-    float osc1Unison = 1.f;
-    float osc1Spread = 1.f;
-    float osc1Tune = 0.f;
+//    float osc1Gain = 1.f;
+//    float osc1Unison = 1.f;
+//    float osc1Spread = 1.f;
+//    float osc1Tune = 0.f;
     
     float osc2Gain = 1.f;
     float osc2Unison = 1.f;
@@ -68,8 +68,14 @@ public:
     float osc2Tune = 0.f;
     
 private:
+    static constexpr int numChannelsToProcess { 2 };
     juce::Synthesiser synth;
+    
     juce::AudioProcessorValueTreeState::ParameterLayout createParameters();
+    void setParams();
+    void setVoiceParams();
+    
+    static constexpr int numVoices { 2 };
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SupersawDesignerPrototypeAudioProcessor)

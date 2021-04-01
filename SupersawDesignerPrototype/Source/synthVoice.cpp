@@ -17,7 +17,13 @@ bool SynthVoice::canPlaySound (juce::SynthesiserSound *sound)
 
 void SynthVoice::startNote (int midiNoteNumber, float velocity, juce::SynthesiserSound *sound, int currentPitchWheelPosition)
 {
-    osc.setWaveFrequency(midiNoteNumber);
+    for (int i = 0; i < 2; i++)
+    {
+        osc1[i].setFreq (midiNoteNumber);
+        osc2[i].setFreq (midiNoteNumber);
+    }
+    
+    
     adsr.noteOn();
 }
 
@@ -48,17 +54,18 @@ void SynthVoice::prepareToPlay(double sampleRate, int samplesPerBlock, int outpu
     spec.sampleRate = sampleRate;
     spec.numChannels = outputChannels;
     
-    osc.prepareToPlay (spec);
+    for (int ch = 0; ch < numChannelsToProcess; ch++)
+    {
+        osc1[ch].prepareToPlay (sampleRate, samplesPerBlock, outputChannels);
+        osc2[ch].prepareToPlay (sampleRate, samplesPerBlock, outputChannels);
+    }
+    
+    
     gain.prepare (spec);
     
     gain.setGainLinear(0.3f);
     
     isPrepared = true;
-}
-
-void SynthVoice::update (const float attack, const float decay, const float sustain, const float release)
-{
-    adsr.updateADSR(attack, decay, sustain, release);
 }
 
 void SynthVoice::renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int startSample, int numSamples)
@@ -71,10 +78,19 @@ void SynthVoice::renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int 
     synthBuffer.setSize(outputBuffer.getNumChannels(), numSamples, false, false, true);
     synthBuffer.clear();
     
-    juce::dsp::AudioBlock<float> audioBlock { synthBuffer };
-    osc.getNextAudioBlock(audioBlock);
-    gain.process(juce::dsp::ProcessContextReplacing<float> (audioBlock));
+    for (int ch = 0; ch < synthBuffer.getNumChannels(); ++ch)
+    {
+        auto* buffer = synthBuffer.getWritePointer (ch, 0);
+        
+        for (int s = 0; s < synthBuffer.getNumSamples(); ++s)
+        {
+            buffer[s] = osc1[ch].processNextSample (buffer[s]) + osc2[ch].processNextSample (buffer[s]);
+        }
+    }
     
+    juce::dsp::AudioBlock<float> audioBlock { synthBuffer };
+    gain.process (juce::dsp::ProcessContextReplacing<float> (audioBlock));
+    gain.process(juce::dsp::ProcessContextReplacing<float> (audioBlock));
     adsr.applyEnvelopeToBuffer(synthBuffer, 0, synthBuffer.getNumSamples());
     
     for (int channel = 0; channel<outputBuffer.getNumChannels(); ++channel)
@@ -84,4 +100,9 @@ void SynthVoice::renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int 
         if (! adsr.isActive())
             clearCurrentNote();
     }
+}
+
+void SynthVoice::reset(){
+    gain.reset();
+    adsr.reset();
 }

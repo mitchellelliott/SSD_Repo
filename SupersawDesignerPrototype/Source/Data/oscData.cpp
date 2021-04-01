@@ -10,9 +10,17 @@
 
 #include "oscData.h"
 
-void OscData::prepareToPlay(juce::dsp::ProcessSpec& spec)
+void OscData::prepareToPlay(double sampleRate, int samplesPerBlock, int outputChannels)
 {
-    prepare (spec);
+    
+    
+    juce::dsp::ProcessSpec spec;
+    spec.maximumBlockSize = samplesPerBlock;
+    spec.sampleRate = sampleRate;
+    spec.numChannels = outputChannels;
+    
+    prepare(spec);
+    
 }
 
 void OscData::setWaveType(const int choice)
@@ -40,12 +48,36 @@ void OscData::setWaveType(const int choice)
     }
 }
 
-void OscData::setWaveFrequency(const int midiNoteNumber)
+void OscData::setGain (const float levelInDecibels)
+{
+    gain.setGainDecibels (levelInDecibels);
+}
+
+void OscData::setFreq(const int midiNoteNumber)
 {
     setFrequency(juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber));
 }
 
-void OscData::getNextAudioBlock ( juce::dsp::AudioBlock<float>& block)
+void OscData::renderNextBlock ( juce::dsp::AudioBlock<float>& block)
 {
+    jassert (block.getNumSamples() > 0);
     process(juce::dsp::ProcessContextReplacing<float> (block));
+    gain.process (juce::dsp::ProcessContextReplacing<float> (block));
+}
+
+float OscData::processNextSample (float input)
+{
+    return gain.processSample (processSample (input));
+}
+
+void OscData::setParams(const int oscChoice, const float oscGain){
+    setWaveType(oscChoice);
+    setGain(oscGain);
+    
+}
+
+void OscData::resetAll()
+{
+    reset();
+    gain.reset();
 }

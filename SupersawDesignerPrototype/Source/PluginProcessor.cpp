@@ -23,7 +23,9 @@ SupersawDesignerPrototypeAudioProcessor::SupersawDesignerPrototypeAudioProcessor
 #endif
 {
     synth.addSound(new SynthSound());
-    synth.addVoice(new SynthVoice());
+    for (int i=0; i<2; i ++){
+        synth.addVoice (new SynthVoice());
+    }
 }
 
 SupersawDesignerPrototypeAudioProcessor::~SupersawDesignerPrototypeAudioProcessor()
@@ -105,6 +107,11 @@ void SupersawDesignerPrototypeAudioProcessor::prepareToPlay (double sampleRate, 
         }
     }
     
+    juce::dsp::ProcessSpec spec;
+    spec.maximumBlockSize = samplesPerBlock;
+    spec.sampleRate = sampleRate;
+    spec.numChannels = getTotalNumOutputChannels();
+    
 }
 
 void SupersawDesignerPrototypeAudioProcessor::releaseResources()
@@ -148,28 +155,10 @@ void SupersawDesignerPrototypeAudioProcessor::processBlock (juce::AudioBuffer<fl
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-    for (int i=0; i<synth.getNumVoices(); ++i)
-    {
-        if (auto voice = dynamic_cast<SynthVoice*>(synth.getVoice(i)))
-        {
-            //Osc controls
-            //ADSR
-            //LFO
-            
-            auto& attack = *apvts.getRawParameterValue("ATTACK");
-            auto& decay = *apvts.getRawParameterValue("DECAY");
-            auto& sustain = *apvts.getRawParameterValue("SUSTAIN");
-            auto& release = *apvts.getRawParameterValue("RELEASE");
-            
-            auto& oscWaveChoice = *apvts.getRawParameterValue("OSC1WAVETYPE");
-            
-            voice->update (attack.load(), decay.load(), sustain.load(), release.load());
-            voice->getOscillator().setWaveType(oscWaveChoice);
-            
-        }
-    }
-    
+    setParams();
+        
     synth.renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());
+    juce::dsp::AudioBlock<float> block { buffer };
     
 }
 
@@ -211,9 +200,13 @@ juce::AudioProcessorValueTreeState::ParameterLayout SupersawDesignerPrototypeAud
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
     
     //Osc Select
-    params.push_back(std::make_unique<juce::AudioParameterChoice>("OSC1WAVETYPE", "Osc 1 Wave Type", juce::StringArray { "Sine" , "Saw" , "Square" }, 0));
+    params.push_back(std::make_unique<juce::AudioParameterChoice>("OSC1", "Oscillator 1", juce::StringArray { "Sine" , "Saw" , "Square" }, 0));
     
-    params.push_back(std::make_unique<juce::AudioParameterChoice>("OSC2WAVETYPE", "Osc 2 Wave Type", juce::StringArray { "Sine" , "Saw" , "Square" }, 0));
+    params.push_back(std::make_unique<juce::AudioParameterChoice>("OSC2", "Osccillator 2", juce::StringArray { "Sine" , "Saw" , "Square" }, 0));
+    
+    // OSC Gain
+    params.push_back (std::make_unique<juce::AudioParameterFloat>("OSC1GAIN", "Oscillator 1 Gain", juce::NormalisableRange<float> { -40.0f, 0.2f, 0.1f }, 0.1f, "dB"));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>("OSC2GAIN", "Oscillator 2 Gain", juce::NormalisableRange<float> { -40.0f, 0.2f, 0.1f }, 0.1f, "dB"));
     
     //ADSR
     params.push_back (std::make_unique<juce::AudioParameterFloat>("ATTACK", "Attack", juce::NormalisableRange<float> { 0.1f, 1.0f, }, 0.1f));
@@ -221,9 +214,50 @@ juce::AudioProcessorValueTreeState::ParameterLayout SupersawDesignerPrototypeAud
     params.push_back (std::make_unique<juce::AudioParameterFloat>("SUSTAIN", "Sustain", juce::NormalisableRange<float> { 0.1f, 1.0f, }, 0.1f));
     params.push_back (std::make_unique<juce::AudioParameterFloat>("RELEASE", "Release", juce::NormalisableRange<float> { 0.1f, 3.0f, }, 0.4f));
     
-
-    
-    
     
     return { params.begin() , params.end() };
+}
+
+void SupersawDesignerPrototypeAudioProcessor::setParams(){
+    
+    setVoiceParams();
+    
+}
+
+void SupersawDesignerPrototypeAudioProcessor::setVoiceParams(){
+    
+    for (int i=0; i<synth.getNumVoices(); ++i)
+    {
+        if (auto voice = dynamic_cast<SynthVoice*>(synth.getVoice(i)))
+        {
+            
+            auto& attack = *apvts.getRawParameterValue("ATTACK");
+            auto& decay = *apvts.getRawParameterValue("DECAY");
+            auto& sustain = *apvts.getRawParameterValue("SUSTAIN");
+            auto& release = *apvts.getRawParameterValue("RELEASE");
+            
+            auto& osc1Choice = *apvts.getRawParameterValue("OSC1");
+            auto& osc2Choice = *apvts.getRawParameterValue("OSC2");
+            auto& osc1Gain = *apvts.getRawParameterValue ("OSC1GAIN");
+            auto& osc2Gain = *apvts.getRawParameterValue ("OSC2GAIN");
+            
+            auto& osc1 = voice->getOscillator1();
+            auto& osc2 = voice->getOscillator2();
+            
+            auto& adsr = voice->getAdsr();
+            
+            for (int i = 0; i < getTotalNumOutputChannels(); i++)
+            {
+                osc1[i].setParams (osc1Choice, osc1Gain);
+                osc2[i].setParams (osc2Choice, osc2Gain);
+            }
+            
+            adsr.update (attack.load(), decay.load(), sustain.load(), release.load());
+            
+        }
+    }
+    
+    
+    
+    
 }
