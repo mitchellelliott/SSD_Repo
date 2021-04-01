@@ -208,6 +208,18 @@ juce::AudioProcessorValueTreeState::ParameterLayout SupersawDesignerPrototypeAud
     params.push_back (std::make_unique<juce::AudioParameterFloat>("OSC1GAIN", "Oscillator 1 Gain", juce::NormalisableRange<float> { -40.0f, 0.2f, 0.1f }, 0.1f, "dB"));
     params.push_back (std::make_unique<juce::AudioParameterFloat>("OSC2GAIN", "Oscillator 2 Gain", juce::NormalisableRange<float> { -40.0f, 0.2f, 0.1f }, 0.1f, "dB"));
     
+    // FM Osc Freq
+    params.push_back (std::make_unique<juce::AudioParameterFloat>("OSC1FMFREQ", "Oscillator 1 FM Frequency", juce::NormalisableRange<float> { 0.0f, 1000.0f, 0.1f }, 0.0f, "Hz"));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>("OSC2FMFREQ", "Oscillator 2 FM Frequency", juce::NormalisableRange<float> { 0.0f, 1000.0f, 0.1f }, 0.0f, "Hz"));
+    
+    // FM Osc Depth
+    params.push_back (std::make_unique<juce::AudioParameterFloat>("OSC1FMDEPTH", "Oscillator 1 FM Depth", juce::NormalisableRange<float> { 0.0f, 100.0f, 0.1f }, 0.0f, ""));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>("OSC2FMDEPTH", "Oscillator 2 FM Depth", juce::NormalisableRange<float> { 0.0f, 100.0f, 0.1f }, 0.0f, ""));
+    
+    // OSC Tune val
+    params.push_back (std::make_unique<juce::AudioParameterInt>("OSC1TUNE", "Oscillator 1 Tune", -49.0f, 49.0f, 0));
+    params.push_back (std::make_unique<juce::AudioParameterInt>("OSC2TUNE", "Oscillator 2 Tune", -49.0f, 49.0f, 0));
+    
     //ADSR
     params.push_back (std::make_unique<juce::AudioParameterFloat>("ATTACK", "Attack", juce::NormalisableRange<float> { 0.1f, 1.0f, }, 0.1f));
     params.push_back (std::make_unique<juce::AudioParameterFloat>("DECAY", "Decay", juce::NormalisableRange<float> { 0.1f, 1.0f, }, 0.1f));
@@ -240,6 +252,12 @@ void SupersawDesignerPrototypeAudioProcessor::setVoiceParams(){
             auto& osc2Choice = *apvts.getRawParameterValue("OSC2");
             auto& osc1Gain = *apvts.getRawParameterValue ("OSC1GAIN");
             auto& osc2Gain = *apvts.getRawParameterValue ("OSC2GAIN");
+            auto& osc1Tune = *apvts.getRawParameterValue("OSC1TUNE");
+            auto& osc2Tune = *apvts.getRawParameterValue("OSC2TUNE");
+            auto& osc1FmFreq = *apvts.getRawParameterValue ("OSC1FMFREQ");
+            auto& osc2FmFreq = *apvts.getRawParameterValue ("OSC2FMFREQ");
+            auto& osc1FmDepth = *apvts.getRawParameterValue ("OSC1FMDEPTH");
+            auto& osc2FmDepth = *apvts.getRawParameterValue ("OSC2FMDEPTH");
             
             auto& osc1 = voice->getOscillator1();
             auto& osc2 = voice->getOscillator2();
@@ -248,8 +266,8 @@ void SupersawDesignerPrototypeAudioProcessor::setVoiceParams(){
             
             for (int i = 0; i < getTotalNumOutputChannels(); i++)
             {
-                osc1[i].setParams (osc1Choice, osc1Gain);
-                osc2[i].setParams (osc2Choice, osc2Gain);
+                osc1[i].setParams (osc1Choice, osc1Gain, osc1Tune, osc1FmFreq, osc1FmDepth);
+                osc2[i].setParams (osc2Choice, osc2Gain, osc2Tune, osc2FmFreq, osc2FmDepth);
             }
             
             adsr.update (attack.load(), decay.load(), sustain.load(), release.load());

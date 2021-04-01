@@ -41,6 +41,7 @@ void AdsrComponent::paint (juce::Graphics& g)
     g.setColour (juce::Colours::goldenrod);
     g.setFont(15.0);
     g.setFont (g.getCurrentFont().bold);
+    
 }
 
 void AdsrComponent::resized()

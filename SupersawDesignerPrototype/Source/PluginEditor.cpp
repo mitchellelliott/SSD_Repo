@@ -11,7 +11,7 @@
 
 //==============================================================================
 SupersawDesignerPrototypeAudioProcessorEditor::SupersawDesignerPrototypeAudioProcessorEditor (SupersawDesignerPrototypeAudioProcessor& p)
-: AudioProcessorEditor (&p), audioProcessor (p), osc1 (audioProcessor.apvts, "OSC1", "OSC1GAIN"), osc2 (audioProcessor.apvts, "OSC2", "OSC2GAIN"), adsr (audioProcessor.apvts)
+: AudioProcessorEditor (&p), audioProcessor (p), osc1 (audioProcessor.apvts, "OSC1", "OSC1GAIN", "OSC1TUNE", "OSC1FMFREQ", "OSC1FMDEPTH"), osc2 (audioProcessor.apvts, "OSC2", "OSC2GAIN", "OSC2TUNE", "OSC2FMFREQ", "OSC2FMDEPTH"), adsr (audioProcessor.apvts)
 {
     setSize (700, 600);
     addAndMakeVisible(osc1);
@@ -132,9 +132,9 @@ void SupersawDesignerPrototypeAudioProcessorEditor::paint (juce::Graphics& g)
 //    g.drawFittedText("Spread", unisonSlider1.getRight()+padding+25 , sliderStartY-20, 50, 50, juce::Justification::centredTop, 1);
 //
 //    //Osc1 Tune Label
-//    g.setColour(juce::Colours::gold);
-//    g.setFont(juce::Font ("Helvetica Neue", 15.f, juce::Font::underlined));
-//    g.drawFittedText("Tune", spreadSlider1.getRight()+padding+25 , sliderStartY-20, 50, 50, juce::Justification::centredTop, 1);
+    g.setColour(juce::Colours::gold);
+    g.setFont(juce::Font ("Helvetica Neue", 15.f, juce::Font::underlined));
+    g.drawFittedText("Tune", 200+padding+25 , sliderStartY-20, 50, 50, juce::Justification::centredTop, 1);
     
     //Osc2 Level Label
     g.setColour(juce::Colours::gold);
@@ -166,8 +166,8 @@ void SupersawDesignerPrototypeAudioProcessorEditor::paint (juce::Graphics& g)
 void SupersawDesignerPrototypeAudioProcessorEditor::resized()
 {
     //set osc selector bounds
-    osc1.setBounds(25, 75, 250, 100);
-    osc2.setBounds(25, 250, 250, 100);
+    osc1.setBounds(25, 75, 650, 100);
+    osc2.setBounds(25, 250, 650, 100);
 
     //set adsr bounds
     adsr.setBounds(0, 380, getWidth()/3, getHeight()/3);

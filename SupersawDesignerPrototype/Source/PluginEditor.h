@@ -49,12 +49,9 @@ private:
 
     juce::Slider unisonSlider1;
     juce::Slider spreadSlider1;
-    juce::Slider tuneSlider1;
     
-    juce::Slider gainSlider2;
     juce::Slider unisonSlider2;
     juce::Slider spreadSlider2;
-    juce::Slider tuneSlider2;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SupersawDesignerPrototypeAudioProcessorEditor);
 };
