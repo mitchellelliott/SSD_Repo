@@ -109,57 +109,57 @@ void SupersawDesignerPrototypeAudioProcessorEditor::paint (juce::Graphics& g)
     //Osc 1 Title
     g.setColour(juce::Colours::gold);
     g.setFont(juce::Font ("Helvetica Neue", 15.f, juce::Font::underlined));
-    g.drawFittedText("Oscillator 1", 35, sliderStartY-20, 75, 75, juce::Justification::centredTop, 1);
+    g.drawFittedText("Oscillator 1", 35, sliderStartY-10, 75, 75, juce::Justification::centredTop, 1);
     
     //Osc 2 Title
     g.setColour(juce::Colours::gold);
     g.setFont(juce::Font ("Helvetica Neue", 15.f, juce::Font::underlined));
-    g.drawFittedText("Oscillator 2", 35, sliderStartY-20+verticalPadding, 75, 75, juce::Justification::centredTop, 1);
+    g.drawFittedText("Oscillator 2", 35, sliderStartY+verticalPadding-10, 75, 75, juce::Justification::centredTop, 1);
     
     //Osc1 Level Label
     g.setColour(juce::Colours::gold);
     g.setFont(juce::Font ("Helvetica Neue", 15.f, juce::Font::underlined));
-    g.drawFittedText("Level", sliderStartX+25 , sliderStartY-20, 50, 50, juce::Justification::centredTop, 1);
+    g.drawFittedText("Level", sliderStartX+padding-15 , sliderStartY-10, 50, 50, juce::Justification::centredTop, 1);
 
-//    //Osc1 Unison Label
-//    g.setColour(juce::Colours::gold);
-//    g.setFont(juce::Font ("Helvetica Neue", 15.f, juce::Font::underlined));
-//    g.drawFittedText("Unison", gainSlider2.getRight()+padding+25 , sliderStartY-20, 50, 50, juce::Justification::centredTop, 1);
-//
-//    //Osc1 Spread Label
-//    g.setColour(juce::Colours::gold);
-//    g.setFont(juce::Font ("Helvetica Neue", 15.f, juce::Font::underlined));
-//    g.drawFittedText("Spread", unisonSlider1.getRight()+padding+25 , sliderStartY-20, 50, 50, juce::Justification::centredTop, 1);
-//
-//    //Osc1 Tune Label
+    //Osc1 Tune Label
     g.setColour(juce::Colours::gold);
     g.setFont(juce::Font ("Helvetica Neue", 15.f, juce::Font::underlined));
-    g.drawFittedText("Tune", 200+padding+25 , sliderStartY-20, 50, 50, juce::Justification::centredTop, 1);
+    g.drawFittedText("Tune", 323 , sliderStartY-10, 50, 50, juce::Justification::centredTop, 1);
+    
+    //Osc1 Fm Freq Label
+    g.setColour(juce::Colours::gold);
+    g.setFont(juce::Font ("Helvetica Neue", 15.f, juce::Font::underlined));
+    g.drawFittedText("FM Freq", 455, sliderStartY-10, 50, 50,juce::Justification::centredTop, 1);
+    
+    //Osc1 Fm Depth Label
+    g.setColour(juce::Colours::gold);
+    g.setFont(juce::Font ("Helvetica Neue", 15.f, juce::Font::underlined));
+    g.drawFittedText("FM Depth", 590, sliderStartY-10, 50, 50,juce::Justification::centredTop, 1);
     
     //Osc2 Level Label
     g.setColour(juce::Colours::gold);
     g.setFont(juce::Font ("Helvetica Neue", 15.f, juce::Font::underlined));
-    g.drawFittedText("Level", sliderStartX+25 , sliderStartY-20+verticalPadding, 50, 50, juce::Justification::centredTop, 1);
+    g.drawFittedText("Level", sliderStartX+padding-15 , sliderStartY-10+verticalPadding, 50, 50, juce::Justification::centredTop, 1);
     
-//    //Osc2 Unison Label
-//    g.setColour(juce::Colours::gold);
-//    g.setFont(juce::Font ("Helvetica Neue", 15.f, juce::Font::underlined));
-//    g.drawFittedText("Unison", gainSlider2.getRight()+padding+25 , sliderStartY-20+verticalPadding, 50, 50, juce::Justification::centredTop, 1);
-//
-//    //Osc2 Spread Label
-//    g.setColour(juce::Colours::gold);
-//    g.setFont(juce::Font ("Helvetica Neue", 15.f, juce::Font::underlined));
-//    g.drawFittedText("Spread", unisonSlider2.getRight()+padding+25 , sliderStartY-20+verticalPadding, 50, 50, juce::Justification::centredTop, 1);
-//
-//    //Osc2 Unison Label
-//    g.setColour(juce::Colours::gold);
-//    g.setFont(juce::Font ("Helvetica Neue", 15.f, juce::Font::underlined));
-//    g.drawFittedText("Tune", spreadSlider2.getRight()+padding+25 , sliderStartY-20+verticalPadding, 50, 50, juce::Justification::centredTop, 1);
-//
-//    //ADSR Envelope Label
-//    g.setColour(juce::Colours::gold);
-//    g.setFont(juce::Font ("Helvetica Neue", 15.f, juce::Font::underlined));
-//    g.drawFittedText("Envelope", 87, 390, 50, 50, juce::Justification::centredTop, 1);
+    //Osc2 Tune Label
+    g.setColour(juce::Colours::gold);
+    g.setFont(juce::Font ("Helvetica Neue", 15.f, juce::Font::underlined));
+    g.drawFittedText("Tune", 323 , sliderStartY-10+verticalPadding, 50, 50, juce::Justification::centredTop, 1);
+    
+    //Osc1 Fm Freq Label
+    g.setColour(juce::Colours::gold);
+    g.setFont(juce::Font ("Helvetica Neue", 15.f, juce::Font::underlined));
+    g.drawFittedText("FM Freq", 455, sliderStartY-10+verticalPadding, 50, 50,juce::Justification::centredTop, 1);
+    
+    //Osc2 Fm Depth Label
+    g.setColour(juce::Colours::gold);
+    g.setFont(juce::Font ("Helvetica Neue", 15.f, juce::Font::underlined));
+    g.drawFittedText("FM Depth", 590, sliderStartY-10+verticalPadding, 50, 50,juce::Justification::centredTop, 1);
+    
+    //ADSR Envelope Label
+    g.setColour(juce::Colours::gold);
+    g.setFont(juce::Font ("Helvetica Neue", 15.f, juce::Font::underlined));
+    g.drawFittedText("Envelope", 87, 390, 50, 50, juce::Justification::centredTop, 1);
     
 }
 

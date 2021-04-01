@@ -45,13 +45,6 @@ private:
     OscComponent osc2;
     AdsrComponent adsr;
     
-   
-
-    juce::Slider unisonSlider1;
-    juce::Slider spreadSlider1;
-    
-    juce::Slider unisonSlider2;
-    juce::Slider spreadSlider2;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SupersawDesignerPrototypeAudioProcessorEditor);
 };
