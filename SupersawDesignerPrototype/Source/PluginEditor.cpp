@@ -11,12 +11,18 @@
 
 //==============================================================================
 SupersawDesignerPrototypeAudioProcessorEditor::SupersawDesignerPrototypeAudioProcessorEditor (SupersawDesignerPrototypeAudioProcessor& p)
-: AudioProcessorEditor (&p), audioProcessor (p), osc1 (audioProcessor.apvts, "OSC1", "OSC1GAIN", "OSC1TUNE", "OSC1FMFREQ", "OSC1FMDEPTH"), osc2 (audioProcessor.apvts, "OSC2", "OSC2GAIN", "OSC2TUNE", "OSC2FMFREQ", "OSC2FMDEPTH"), adsr (audioProcessor.apvts)
+: AudioProcessorEditor (&p)
+, audioProcessor (p)
+, osc1 (audioProcessor.apvts, "OSC1", "OSC1GAIN", "OSC1TUNE", "OSC1FMFREQ", "OSC1FMDEPTH")
+, osc2 (audioProcessor.apvts, "OSC2", "OSC2GAIN", "OSC2TUNE", "OSC2FMFREQ", "OSC2FMDEPTH")
+, adsr (audioProcessor.apvts)
+, reverb (audioProcessor.apvts, "REVERBSIZE", "REVERBDAMPING", "REVERBWIDTH", "REVERBDRY", "REVERBWET", "REVERBFREEZE")
 {
     setSize (700, 600);
     addAndMakeVisible(osc1);
     addAndMakeVisible(osc2);
     addAndMakeVisible(adsr);
+    addAndMakeVisible(reverb);
     
     
 //    //unison Slider 1
@@ -171,6 +177,9 @@ void SupersawDesignerPrototypeAudioProcessorEditor::resized()
 
     //set adsr bounds
     adsr.setBounds(0, 380, getWidth()/3, getHeight()/3);
+    
+    //setReverbBounds
+    reverb.setBounds(adsr.getRight(), 380, (getWidth()/3)*2, getHeight()/3);
     
     
 }

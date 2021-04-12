@@ -13,6 +13,7 @@
 #include "synthVoice.h"
 #include "UI/adsrComponent.h"
 #include "UI/oscComponent.h"
+#include "UI/reverbComponent.h"
 
 //==============================================================================
 /**
@@ -44,6 +45,7 @@ private:
     OscComponent osc1;
     OscComponent osc2;
     AdsrComponent adsr;
+    reverbComponent reverb;
     
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SupersawDesignerPrototypeAudioProcessorEditor);

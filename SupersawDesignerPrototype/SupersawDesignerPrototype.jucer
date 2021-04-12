@@ -22,6 +22,10 @@
         <FILE id="HwhCos" name="oscComponent.cpp" compile="1" resource="0"
               file="Source/UI/oscComponent.cpp"/>
         <FILE id="kMZ250" name="oscComponent.h" compile="0" resource="0" file="Source/UI/oscComponent.h"/>
+        <FILE id="fG5iVB" name="reverbComponent.cpp" compile="1" resource="0"
+              file="Source/UI/reverbComponent.cpp"/>
+        <FILE id="OmqBVc" name="reverbComponent.h" compile="0" resource="0"
+              file="Source/UI/reverbComponent.h"/>
       </GROUP>
       <GROUP id="{B5EB955B-8280-B86C-735A-FDA6B4D39DE7}" name="Data">
         <FILE id="MDKwDM" name="oscData.cpp" compile="1" resource="0" file="Source/Data/oscData.cpp"/>

@@ -23,7 +23,7 @@ SupersawDesignerPrototypeAudioProcessor::SupersawDesignerPrototypeAudioProcessor
 #endif
 {
     synth.addSound(new SynthSound());
-    for (int i=0; i<2; i ++){
+    for (int i=0; i<5; i ++){
         synth.addVoice (new SynthVoice());
     }
 }
@@ -112,6 +112,15 @@ void SupersawDesignerPrototypeAudioProcessor::prepareToPlay (double sampleRate, 
     spec.sampleRate = sampleRate;
     spec.numChannels = getTotalNumOutputChannels();
     
+    reverbParams.roomSize = 0.5f;
+    reverbParams.width = 1.0f;
+    reverbParams.damping = 0.5f;
+    reverbParams.freezeMode = 0.0f;
+    reverbParams.dryLevel = 1.0f;
+    reverbParams.wetLevel = 0.0f;
+    
+    reverb.setParameters (reverbParams);
+    
 }
 
 void SupersawDesignerPrototypeAudioProcessor::releaseResources()
@@ -159,6 +168,9 @@ void SupersawDesignerPrototypeAudioProcessor::processBlock (juce::AudioBuffer<fl
         
     synth.renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());
     juce::dsp::AudioBlock<float> block { buffer };
+    reverb.process(juce::dsp::ProcessContextReplacing<float> (block));
+    
+    block.copyTo(buffer);
     
 }
 
@@ -226,6 +238,14 @@ juce::AudioProcessorValueTreeState::ParameterLayout SupersawDesignerPrototypeAud
     params.push_back (std::make_unique<juce::AudioParameterFloat>("SUSTAIN", "Sustain", juce::NormalisableRange<float> { 0.1f, 1.0f, }, 0.1f));
     params.push_back (std::make_unique<juce::AudioParameterFloat>("RELEASE", "Release", juce::NormalisableRange<float> { 0.1f, 3.0f, }, 0.4f));
     
+    //Reverb
+    params.push_back (std::make_unique<juce::AudioParameterFloat>("REVERBSIZE", "Reverb Size", juce::NormalisableRange<float> { 0.0f, 1.0f, 0.1f }, 0.0f, ""));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>("REVERBWIDTH", "Reverb Width", juce::NormalisableRange<float> { 0.0f, 1.0f, 0.1f }, 1.0f, ""));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>("REVERBDAMPING", "Reverb Damping", juce::NormalisableRange<float> { 0.0f, 1.0f, 0.1f }, 0.5f, ""));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>("REVERBDRY", "Reverb Dry", juce::NormalisableRange<float> { 0.0f, 1.0f, 0.1f }, 1.0f, ""));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>("REVERBWET", "Reverb Wet", juce::NormalisableRange<float> { 0.0f, 1.0f, 0.1f }, 0.0f, ""));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>("REVERBFREEZE", "Reverb Freeze", juce::NormalisableRange<float> { 0.0f, 1.0f, 0.1f }, 0.0f, ""));
+    
     
     return { params.begin() , params.end() };
 }
@@ -233,6 +253,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout SupersawDesignerPrototypeAud
 void SupersawDesignerPrototypeAudioProcessor::setParams(){
     
     setVoiceParams();
+    setReverbParams();
     
 }
 
@@ -277,5 +298,18 @@ void SupersawDesignerPrototypeAudioProcessor::setVoiceParams(){
     
     
     
+    
+}
+
+void SupersawDesignerPrototypeAudioProcessor::setReverbParams(){
+    
+    reverbParams.roomSize = *apvts.getRawParameterValue ("REVERBSIZE");
+    reverbParams.width = *apvts.getRawParameterValue ("REVERBWIDTH");
+    reverbParams.damping = *apvts.getRawParameterValue ("REVERBDAMPING");
+    reverbParams.dryLevel = *apvts.getRawParameterValue ("REVERBDRY");
+    reverbParams.wetLevel = *apvts.getRawParameterValue ("REVERBWET");
+    reverbParams.freezeMode = *apvts.getRawParameterValue ("REVERBFREEZE");
+    
+    reverb.setParameters (reverbParams);
     
 }
