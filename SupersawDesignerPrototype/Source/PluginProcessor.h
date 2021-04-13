@@ -66,11 +66,16 @@ private:
     void setParams();
     void setVoiceParams();
     void setReverbParams();
+    void setChorusParams();
     
     
     static constexpr int numVoices { 8 };
     juce::dsp::Reverb reverb;
     juce::Reverb::Parameters reverbParams;
+    
+    juce::dsp::Chorus<float> chorus;
+    
+    
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SupersawDesignerPrototypeAudioProcessor)

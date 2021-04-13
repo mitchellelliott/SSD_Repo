@@ -23,7 +23,7 @@ SupersawDesignerPrototypeAudioProcessor::SupersawDesignerPrototypeAudioProcessor
 #endif
 {
     synth.addSound(new SynthSound());
-    for (int i=0; i<5; i ++){
+    for (int i=0; i<numVoices; i ++){
         synth.addVoice (new SynthVoice());
     }
 }
@@ -121,6 +121,9 @@ void SupersawDesignerPrototypeAudioProcessor::prepareToPlay (double sampleRate, 
     
     reverb.setParameters (reverbParams);
     
+    chorus.prepare(spec);
+    
+    
 }
 
 void SupersawDesignerPrototypeAudioProcessor::releaseResources()
@@ -169,6 +172,7 @@ void SupersawDesignerPrototypeAudioProcessor::processBlock (juce::AudioBuffer<fl
     synth.renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());
     juce::dsp::AudioBlock<float> block { buffer };
     reverb.process(juce::dsp::ProcessContextReplacing<float> (block));
+    chorus.process(juce::dsp::ProcessContextReplacing<float> (block));
     
     block.copyTo(buffer);
     
@@ -206,6 +210,8 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
     return new SupersawDesignerPrototypeAudioProcessor();
 }
 
+
+//==============================================================================
 // Audio Processor Value Tree State
 juce::AudioProcessorValueTreeState::ParameterLayout SupersawDesignerPrototypeAudioProcessor::createParameters()
 {
@@ -228,7 +234,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout SupersawDesignerPrototypeAud
     params.push_back (std::make_unique<juce::AudioParameterFloat>("OSC1FMDEPTH", "Oscillator 1 FM Depth", juce::NormalisableRange<float> { 0.0f, 100.0f, 0.1f }, 0.0f, ""));
     params.push_back (std::make_unique<juce::AudioParameterFloat>("OSC2FMDEPTH", "Oscillator 2 FM Depth", juce::NormalisableRange<float> { 0.0f, 100.0f, 0.1f }, 0.0f, ""));
     
-    // OSC Tune val
+    // OSC Tune
     params.push_back (std::make_unique<juce::AudioParameterInt>("OSC1TUNE", "Oscillator 1 Tune", -49.0f, 49.0f, 0));
     params.push_back (std::make_unique<juce::AudioParameterInt>("OSC2TUNE", "Oscillator 2 Tune", -49.0f, 49.0f, 0));
     
@@ -246,6 +252,13 @@ juce::AudioProcessorValueTreeState::ParameterLayout SupersawDesignerPrototypeAud
     params.push_back (std::make_unique<juce::AudioParameterFloat>("REVERBWET", "Reverb Wet", juce::NormalisableRange<float> { 0.0f, 1.0f, 0.1f }, 0.0f, ""));
     params.push_back (std::make_unique<juce::AudioParameterFloat>("REVERBFREEZE", "Reverb Freeze", juce::NormalisableRange<float> { 0.0f, 1.0f, 0.1f }, 0.0f, ""));
     
+    //Chorus
+    params.push_back (std::make_unique<juce::AudioParameterFloat>("CHORUSRATE", "Rate", juce::NormalisableRange<float> {0.0f, 99.f, 1.f}, 1.0f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>("DEPTH", "Depth", juce::NormalisableRange<float> {0.f, 1.f, 0.01f}, 0.f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>("CENTREDELAY", "Centre Delay",juce::NormalisableRange<float> {1.f, 100.f, 1.f}, 1.f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>("FEEDBACK", "Feedback", juce::NormalisableRange<float>{-1.f, 1.f, 0.01f}, 0.f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>("MIX", "Mix", juce::NormalisableRange<float> {0.f, 1.f, 0.01f}, 0.f));
+    
     
     return { params.begin() , params.end() };
 }
@@ -254,6 +267,7 @@ void SupersawDesignerPrototypeAudioProcessor::setParams(){
     
     setVoiceParams();
     setReverbParams();
+    setChorusParams();
     
 }
 
@@ -312,4 +326,14 @@ void SupersawDesignerPrototypeAudioProcessor::setReverbParams(){
     
     reverb.setParameters (reverbParams);
     
+}
+
+void SupersawDesignerPrototypeAudioProcessor::setChorusParams(){
+    
+    chorus.setRate(*apvts.getRawParameterValue("CHORUSRATE"));
+    chorus.setCentreDelay(*apvts.getRawParameterValue("CENTREDELAY"));
+    chorus.setDepth(*apvts.getRawParameterValue("DEPTH"));
+    chorus.setFeedback(*apvts.getRawParameterValue("FEEDBACK"));
+    chorus.setMix(*apvts.getRawParameterValue("MIX"));
+
 }

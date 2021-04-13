@@ -81,6 +81,7 @@ void reverbComponent::setSliderWithLabel(juce::Slider &slider, juce::Label &labe
     slider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 50, 25);
     addAndMakeVisible(slider);
     
+    
     attachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(apvts, paramId, slider);
     
     label.setColour (juce::Label::ColourIds::textColourId, juce::Colours::gold);

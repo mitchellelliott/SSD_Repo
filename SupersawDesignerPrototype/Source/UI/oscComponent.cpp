@@ -48,7 +48,7 @@ void OscComponent::resized()
     //Slider Visual Parameters
     const auto bounds = getLocalBounds().reduced(10);
     const auto padding = 10;
-    const auto sliderWidth = 125;
+    const auto sliderWidth = 200;
     const auto sliderHeight = getHeight() - padding;
     const auto sliderStartX = 125 ;
     const auto sliderStartY = 0;

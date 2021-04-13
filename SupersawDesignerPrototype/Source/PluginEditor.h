@@ -14,6 +14,7 @@
 #include "UI/adsrComponent.h"
 #include "UI/oscComponent.h"
 #include "UI/reverbComponent.h"
+#include "UI/chorusComponent.h"
 
 //==============================================================================
 /**
@@ -46,6 +47,7 @@ private:
     OscComponent osc2;
     AdsrComponent adsr;
     reverbComponent reverb;
+    chorusComponent chorus;
     
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SupersawDesignerPrototypeAudioProcessorEditor);

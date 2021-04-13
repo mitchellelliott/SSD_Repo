@@ -17,12 +17,14 @@ SupersawDesignerPrototypeAudioProcessorEditor::SupersawDesignerPrototypeAudioPro
 , osc2 (audioProcessor.apvts, "OSC2", "OSC2GAIN", "OSC2TUNE", "OSC2FMFREQ", "OSC2FMDEPTH")
 , adsr (audioProcessor.apvts)
 , reverb (audioProcessor.apvts, "REVERBSIZE", "REVERBDAMPING", "REVERBWIDTH", "REVERBDRY", "REVERBWET", "REVERBFREEZE")
+, chorus (audioProcessor.apvts, "CHORUSRATE", "DEPTH", "CENTREDELAY", "FEEDBACK", "MIX")
 {
-    setSize (700, 600);
+    setSize (1000, 600);
     addAndMakeVisible(osc1);
     addAndMakeVisible(osc2);
     addAndMakeVisible(adsr);
     addAndMakeVisible(reverb);
+    addAndMakeVisible(chorus);
     
     
 //    //unison Slider 1
@@ -172,14 +174,18 @@ void SupersawDesignerPrototypeAudioProcessorEditor::paint (juce::Graphics& g)
 void SupersawDesignerPrototypeAudioProcessorEditor::resized()
 {
     //set osc selector bounds
-    osc1.setBounds(25, 75, 650, 100);
-    osc2.setBounds(25, 250, 650, 100);
+    osc1.setBounds(25, 75, 950, 100);
+    osc2.setBounds(25, 250, 950, 100);
 
     //set adsr bounds
-    adsr.setBounds(0, 380, getWidth()/3, getHeight()/3);
+    adsr.setBounds(0, 380, getWidth()/4, getHeight()/3);
     
     //setReverbBounds
-    reverb.setBounds(adsr.getRight(), 380, (getWidth()/3)*2, getHeight()/3);
+    reverb.setBounds(adsr.getRight(), 380, (getWidth()/4)*1.5, getHeight()/3);
+    
+    //setChorusBounds
+    
+    chorus.setBounds(reverb.getRight(), 380, getWidth()/4*1.5, getHeight()/3);
     
     
 }
