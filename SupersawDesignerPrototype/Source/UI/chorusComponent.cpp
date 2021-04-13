@@ -29,14 +29,16 @@ chorusComponent::~chorusComponent()
 
 void chorusComponent::paint (juce::Graphics& g)
 {
-    g.fillAll(juce::Colours::transparentBlack);
     auto bounds = getLocalBounds();
-    g.setColour (juce::Colours::whitesmoke);
-    g.drawRoundedRectangle(bounds.toFloat().reduced (5.0f), 5.0f, 2.0f);
+    auto labelSpace = bounds.removeFromTop(20.f);
     
-    g.setColour (juce::Colours::goldenrod);
+    g.fillAll(juce::Colours::transparentBlack);
+    g.setColour (juce::Colours::gold);
     g.setFont(15.0);
-    g.setFont (g.getCurrentFont().bold);
+
+    g.drawText("Chorus", labelSpace.withX(5), juce::Justification::left);
+    g.setColour(juce::Colours::white);
+    g.drawRoundedRectangle(bounds.toFloat().reduced (5.0f), 5.0f, 2.0f);
 }
 
 void chorusComponent::resized()

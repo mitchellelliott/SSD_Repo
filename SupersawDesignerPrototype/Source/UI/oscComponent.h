@@ -24,7 +24,9 @@ private:
     juce::ComboBox oscWaveSelector;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> oscWaveSelectorAttachment;
     
-    void setSliderParams(juce::Slider& slider);
+    using Attachment = juce::AudioProcessorValueTreeState::SliderAttachment;
+    
+    void setSliderWithLabel (juce::Slider& slider, juce::Label& label, juce::AudioProcessorValueTreeState& apvts, juce::String paramId, std::unique_ptr<Attachment>& attachment);
     
     juce::Slider gainSlider;
     juce::Slider tuneSlider;
@@ -37,6 +39,11 @@ private:
     std::unique_ptr<SliderAttachment> tuneSliderAttachment;
     std::unique_ptr<SliderAttachment> fmFreqSliderAttachment;
     std::unique_ptr<SliderAttachment> fmDepthSliderAttachment;
+    
+    juce::Label gainLabel{"Gain", "Gain"};
+    juce::Label detuneLabel{"Detune", "Detune"};
+    juce::Label fmFreqLabel {"FM Freq", "FM Freq"};
+    juce::Label fmDepthLabel {"FM Depth", "FM Depth"};
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OscComponent)
 };
