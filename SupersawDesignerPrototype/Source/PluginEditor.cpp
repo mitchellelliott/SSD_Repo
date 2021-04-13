@@ -19,7 +19,7 @@ SupersawDesignerPrototypeAudioProcessorEditor::SupersawDesignerPrototypeAudioPro
 , reverb (audioProcessor.apvts, "REVERBSIZE", "REVERBDAMPING", "REVERBWIDTH", "REVERBDRY", "REVERBWET", "REVERBFREEZE")
 , chorus (audioProcessor.apvts, "CHORUSRATE", "DEPTH", "CENTREDELAY", "FEEDBACK", "MIX")
 {
-    setSize (1000, 600);
+    setSize (1000, 550);
     addAndMakeVisible(osc1);
     addAndMakeVisible(osc2);
     addAndMakeVisible(adsr);
@@ -174,18 +174,18 @@ void SupersawDesignerPrototypeAudioProcessorEditor::paint (juce::Graphics& g)
 void SupersawDesignerPrototypeAudioProcessorEditor::resized()
 {
     //set osc selector bounds
-    osc1.setBounds(0, 75, 650, 150);
-    osc2.setBounds(0, 225, 650, 150);
+    osc1.setBounds(0, 50, 650, 150);
+    osc2.setBounds(0, 200, 650, 150);
 
     //set adsr bounds
     adsr.setBounds(osc1.getRight(),osc1.getY(), 350, 300);
     
     //setReverbBounds
-    reverb.setBounds(0, 375, getWidth()/2, getHeight()/3);
+    reverb.setBounds(0, 350, getWidth()/2, getHeight()/3);
     
     //setChorusBounds
     
-    chorus.setBounds(reverb.getRight(), 375, getWidth()/2, getHeight()/3);
+    chorus.setBounds(reverb.getRight(), 350, getWidth()/2, getHeight()/3);
     
     
 }
